@@ -46,7 +46,7 @@ Disable the default server and create a named virtual host for `flame.vision`.
 	sudo mkdir -p flame.vision/public_html
 	sudo mkdir -p flame.vision/log
 	
-Copy `config/Apache Virtual Host.conf` to `/etc/apache2/sites-available/flame.vision.conf`.
+Copy `config/virtualhost.conf` to `/etc/apache2/sites-available/flame.vision.conf`.
 
 	sudo a2ensite flame.vision.conf
 	sudo service apache2 restart
