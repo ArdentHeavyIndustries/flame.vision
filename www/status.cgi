@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 drv = require "luasql.sqlite3"
 dbenv = drv.sqlite3()
-db = dbenv:connect("🔥.db")
+db = dbenv:connect("../🔥.db")
 cur = db:execute("SELECT * FROM status")
 res = cur:fetch({}, "a")
 print("{")

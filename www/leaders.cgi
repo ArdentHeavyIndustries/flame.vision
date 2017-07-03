@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 drv = require "luasql.sqlite3"
 dbenv = drv.sqlite3()
-db = dbenv:connect("🔥.db")
+db = dbenv:connect("../🔥.db")
 cur = db:execute("SELECT * FROM leaders ORDER BY avg desc LIMIT 10")
 res = cur:fetch({}, "a")
 print("{")
