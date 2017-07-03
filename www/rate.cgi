@@ -4,7 +4,7 @@ if cookie == nil then
     urandom = assert(io.open('/dev/urandom','rb'))
     fuck, all, this, bullshit = urandom:read(4):byte(1,4)
     urandom:close()
-    rand = ((fuck * 255 * 255 * 255) + (all * 255 * 255) + (this * 255) + bullshit)
+    rand = ((fuck * 256 * 256 * 256) + (all * 256 * 256) + (this * 256) + bullshit)
     print(string.format("Set-Cookie: id=%s; Expires=Date: Fri, 1 Sept 2017 00:00:00 GMT;\n", rand))
     cookie = string.format("id=%s", rand)
 end
