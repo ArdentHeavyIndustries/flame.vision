@@ -7,9 +7,10 @@ cur = db:execute("SELECT * FROM status")
 res = cur:fetch({}, "a")
 print("{")
 while res do
-    print(string.format("    \"%s\":\"%s\"", res.thing, res.value))
+    print(string.format("    \"%s\":\"%s\",", res.thing, res.value))
     res = cur:fetch(res, "a")
 end
+print("    \"end\":\"true\"")
 print("}")
 db:close()
 dbenv:close()

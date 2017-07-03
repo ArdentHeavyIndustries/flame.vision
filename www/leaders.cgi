@@ -7,9 +7,10 @@ cur = db:execute("SELECT * FROM leaders ORDER BY avg desc LIMIT 10")
 res = cur:fetch({}, "a")
 print("{")
 while res do
-    print(string.format("    \"%s\":\"%s\"", res.player, res.avg))
+    print(string.format("    \"%s\":\"%s\",", res.player, res.avg))
     res = cur:fetch(res, "a")
 end
+print("    \"end\":\"true\"")
 print("}")
 db:close()
 dbenv:close()
