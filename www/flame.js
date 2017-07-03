@@ -109,8 +109,8 @@ Fire.prototype = {
             if (running !== undefined)
                 self.running = running;
 
-            if (typeof(status["currentPlayer"]) === "string")
-                self.currentPlayer = status["currentPlayer"];
+            if (typeof(status["currentplayer"]) === "string")
+                self.currentPlayer = status["currentplayer"];
 
             self.updateDOMSoon();
         });
