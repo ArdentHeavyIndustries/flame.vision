@@ -12,7 +12,8 @@ function _randomParagraphColor(isDark) {
     var paragraphs = document.getElementsByTagName("p");
     var i;
     for (i = 0; i < paragraphs.length; i++) {
-        paragraphs[i].style.backgroundColor = randomHSL(isDark);
+        var h = randomHSL(isDark);
+        paragraphs[i].style.backgroundColor = h;
         
         if (isDark) {
             paragraphs[i].style.color = "grey";

@@ -27,7 +27,12 @@ textarea {
     color: #444;
 }
 
-p {
+a, a:visited{
+     color: #333;
+}
+
+a {
+    text-decoration: underline;
 }
 
 .uppercase {
