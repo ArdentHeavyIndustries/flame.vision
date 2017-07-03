@@ -20,6 +20,13 @@ body {
     line-height: 100px;
 }
 
+textarea {
+    font-family: -apple-system, "Helvetica Neue", san-serif;
+    font-weight: 900;
+    font-size: 48px;
+    color: #444;
+}
+
 p {
 }
 

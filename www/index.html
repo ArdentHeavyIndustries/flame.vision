@@ -1,61 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="styles.css" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="styles.css">
     <title>
     Radiance @ Smukfest
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1.0">
 </head>
+<script language="javascript" src="flame.js"></script>
 <body onload="randomColor()">
-
-<script>
-    var priorHues = new Array();
-    
-    function randomColor() {
-        var paragraphs = document.getElementsByTagName("p");
-        var i;
-        for (i = 0; i < paragraphs.length; i++) {
-            paragraphs[i].style.backgroundColor = randomHSL();
-        }
-        
-        document.body.style.backgroundColor = randomHSL();
-    }
-    
-    function randomHSL() {
-        var h;
-        var isUnique = false;
-        
-        while(!isUnique) {
-            var i;
-            var minRange = 30;
-            h = randomHue();
-            isUnique = true;
-            
-            for (i = 0; i < priorHues.length; i++) {
-                if (Math.abs(h - priorHues[i]) < minRange) {
-                    isUnique = false;
-                    break;
-                }
-            }
-        }
-        
-        priorHues.push(h);
-
-        var s = "75";
-        var l = "70";
-        
-        return "hsl(" + h + ", " + s + "%, " + l + "%)";
-    }
-    
-    function randomHue() {
-        return Math.floor(Math.random() * (360 + 1));
-    }
-</script>
-    
 <div>
     <center>
-        <p>@paulymer</p>
+        <p>@player1</p>
         <p class="uppercase">How Awesome?</p>
         <p>🔥🔥🔥🔥🔥</p>
         <p>🇩🇰?</p>
