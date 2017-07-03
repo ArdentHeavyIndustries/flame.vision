@@ -6,3 +6,6 @@ runlocal:
 initdb:
 	sqlite3 🔥.db < config/initdb.sql
 
+deploy:
+	sudo cp -r ./www/* ~fire/www/
+	sudo chown -R fire:fire ~fire/www/
