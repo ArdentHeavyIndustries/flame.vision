@@ -16,7 +16,7 @@ body {
     font-weight: 900;
     font-size: 48px;
     color: #444;
-    overflow-y: scroll; 
+    overflow-y: scroll;
     line-height: 100px;
 }
 
@@ -37,4 +37,8 @@ a {
 
 .uppercase {
     text-transform: uppercase;
+}
+
+.container.hidden {
+    display: none;
 }
