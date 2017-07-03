@@ -1,62 +1,70 @@
-var priorHues = new Array();
+var Unicorn = function() {};
 
-function randomColor() {
-    _randomParagraphColor(false);
-}
-
-function randomColorDark() {
-    _randomParagraphColor(true);
-}
-
-function _randomParagraphColor(isDark) {
-    var paragraphs = document.getElementsByTagName("p");
-    var i;
-    for (i = 0; i < paragraphs.length; i++) {
-        var h = randomHSL(isDark);
-        paragraphs[i].style.backgroundColor = h;
-
-        paragraphs[i].style.backgroundColor = randomHSL(isDark);
-        if (isDark) {
-            paragraphs[i].style.color = "grey";
+Unicorn.prototype = {
+    unicornItUp: function() {
+        var containerElements = document.querySelectorAll(".container");
+        var containerElementCount = containerElements.length;
+        for (var i = 0; i < containerElementCount; i++) {
+            this._clearPriorHues();
+            var containerElement = containerElements[i];
+            this._randomizeParagraphColors(containerElement);
         }
-    }
 
-    document.body.style.backgroundColor = randomHSL(isDark);
-}
+        this._clearPriorHues();
+        document.body.style.backgroundColor = this._randomHSL(false, new Array());
+    },
 
-function randomHSL(isDark) {
-    var h;
-    var isUnique = false;
+    _clearPriorHues: function() {
+        this.priorHues = new Array();
+    },
 
-    while(!isUnique) {
-        var i;
-        var minRange = 1;
-        h = randomHue();
-        isUnique = true;
+    _randomizeParagraphColors: function(containerElement) {
+        var isDark = false;
+        var paragraphs = containerElement.getElementsByTagName("p");
 
-        for (i = 0; i < priorHues.length; i++) {
-            if (Math.abs(h - priorHues[i]) < minRange) {
-                isUnique = false;
-                break;
+        for (var i = 0; i < paragraphs.length; i++) {
+            paragraphs[i].style.backgroundColor = this._randomHSL(isDark);
+            if (isDark) {
+                paragraphs[i].style.color = "grey";
             }
         }
-    }
+    },
 
-    priorHues.push(h);
+    _randomHSL: function(isDark) {
+        var h;
+        var isUnique = false;
 
-    var s = "75";
-    var l = "70";
+        console.log(this.priorHues)
+        while(!isUnique) {
+            var i;
+            var minRange = 30;
+            h = this._randomHue();
+            isUnique = true;
 
-    if (isDark) {
-        s = "20";
-        l = "15";
-    }
+            for (i = 0; i < this.priorHues.length; i++) {
+                if (Math.abs(h - this.priorHues[i]) < minRange) {
+                    isUnique = false;
+                    break;
+                }
+            }
+        }
 
-    return "hsl(" + h + ", " + s + "%, " + l + "%)";
-}
+        this.priorHues.push(h);
 
-function randomHue() {
-    return Math.floor(Math.random() * (360 + 1));
+        var s = "75";
+        var l = "70";
+
+        if (isDark) {
+            s = "20";
+            l = "15";
+        }
+
+        return "hsl(" + h + ", " + s + "%, " + l + "%)";
+    },
+
+    _randomHue: function() {
+        return Math.floor(Math.random() * (360 + 1));
+    },
 }
 
 var API = function() {};
@@ -151,6 +159,9 @@ Fire.prototype = {
 var fire = undefined;
 
 document.addEventListener("DOMContentLoaded", function() {
+    var unicorn = new Unicorn();
+    unicorn.unicornItUp();
+
     fire = new Fire();
 
     window.setInterval(function() {
