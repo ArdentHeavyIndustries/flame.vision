@@ -7,4 +7,5 @@ INSERT INTO "status" VALUES('running','false');
 INSERT INTO "status" VALUES('currentplayer','');
 INSERT INTO "status" VALUES('currentavg','');
 CREATE INDEX leader_avg ON leaders (avg);
+CREATE INDEX rate_id ON rate (id);
 COMMIT;
