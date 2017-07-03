@@ -109,6 +109,9 @@ Fire.prototype = {
             if (running !== undefined)
                 self.running = running;
 
+            if (typeof(status["currentPlayer"]) === "string")
+                self.currentPlayer = status["currentPlayer"];
+
             self.updateDOMSoon();
         });
     },
@@ -136,9 +139,10 @@ Fire.prototype = {
             window.clearTimeout(this.domCoalescingTimer);
         this.domCoalescingTimer = undefined;
 
-        if (this.running)
+        if (this.running) {
             this.displayContainer("running");
-        else
+            document.getElementById("currentPlayer").innerText = this.currentPlayer;
+        } else
             this.displayContainer("not-running");
     },
 
