@@ -1,5 +1,5 @@
 #!/usr/bin/lua
-print("Content-type: application/json\n")
+print("Content-Type: application/json\n")
 drv = require "luasql.sqlite3"
 dbenv = drv.sqlite3()
 db = dbenv:connect("../🔥.db")
