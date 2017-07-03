@@ -21,7 +21,7 @@ i = cookie:sub(cookie:find("=")+1)
 if tonumber(i) < 1 then
     os.exit()
 end
-if tonumber(q) < 1 then
+if tonumber(q) < 1 or tonumber(q) > 5 then
     os.exit()
 end
 
