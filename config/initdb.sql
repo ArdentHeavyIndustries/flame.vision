@@ -1,0 +1,10 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE rate ( id int, rating, int);
+CREATE TABLE leaders (player varchar(255), avg float);
+CREATE TABLE status (thing varchar(255), value varchar(255));
+INSERT INTO "status" VALUES('running','false');
+INSERT INTO "status" VALUES('currentplayer','');
+INSERT INTO "status" VALUES('currentavg','');
+CREATE INDEX leader_avg ON leaders (avg);
+COMMIT;
