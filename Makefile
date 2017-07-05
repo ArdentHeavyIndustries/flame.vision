@@ -1,4 +1,4 @@
-runlocal:
+runlocal: initcache
 	@echo "Starting server on 127.0.0.1:62832..."
 	lighttpd -D -f config/dev.conf
 
@@ -7,6 +7,9 @@ initdb:
 
 initpasswd:
 	htdigest -c passwd 'Welcome to the Fire Realm.' admin
+
+initcache:
+	mkdir -p cache
 
 deploy:
 	sudo cp -r ./www/* ~fire/www/
