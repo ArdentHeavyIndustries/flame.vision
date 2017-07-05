@@ -1,12 +1,27 @@
 #!/usr/bin/lua
+
+--hex2char for urldecode
+function hex2char(hex)
+    return string.char(tonumber(hex, 16))
+end
+
+--urldecode
+function urldecode(s)
+    if(s == nil) then
+        return
+    end
+    return s:gsub('%%(%x%x)', hex2char)
+end
+
 query = os.getenv("QUERY_STRING")
 if (query == nil or query == '') then
     os.exit()
 end
 
---k = query:sub(1, query:find("="))
+print("Content-Type: text/json; charset=utf-8\n")
+
 k = query:sub(1, query:find("=")-1)
-v = query:sub(query:find("=")+1)
+v = urldecode(query:sub(query:find("=")+1))
 
 --print(string.format("k = %s, v = %s", k, v))
 
