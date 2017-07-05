@@ -5,6 +5,9 @@ runlocal:
 initdb:
 	sqlite3 🔥.db < config/initdb.sql
 
+initpasswd:
+	htdigest -c passwd 'Welcome to the Fire Realm.' admin
+
 deploy:
 	sudo cp -r ./www/* ~fire/www/
 	sudo chown -R fire:fire ~fire/www/
