@@ -18,7 +18,7 @@ if (query == nil or query == '') then
     os.exit()
 end
 
-print("Content-Type: text/json; charset=utf-8\n")
+print("Content-Type: application/json; charset=utf-8\n")
 
 k = query:sub(1, query:find("=")-1)
 v = urldecode(query:sub(query:find("=")+1))
