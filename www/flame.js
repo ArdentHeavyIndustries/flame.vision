@@ -34,7 +34,6 @@ Unicorn.prototype = {
         var h;
         var isUnique = false;
 
-        console.log(this.priorHues)
         while(!isUnique) {
             var i;
             var minRange = 30;
@@ -71,7 +70,6 @@ var API = function() {};
 
 API.prototype = {
     get: function(url, callback) {
-        console.log("Invoking API endpoint " + url);
         var request = new XMLHttpRequest();
         request.responseType = "json";
         request.addEventListener("load", function() {
