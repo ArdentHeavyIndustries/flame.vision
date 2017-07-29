@@ -18,6 +18,7 @@ body {
     color: #444;
     overflow-y: scroll;
     line-height: 100px;
+    text-align: center;
 }
 
 textarea {
