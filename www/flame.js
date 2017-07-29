@@ -138,24 +138,24 @@ Fire.prototype = {
         this.domCoalescingTimer = undefined;
 
         if (this.running) {
-            this.displayContainer("running");
+            this.showContainer("running");
             document.getElementById("currentPlayer").innerText = this.currentPlayer;
         } else
-            this.displayContainer("not-running");
+            this.showContainer("not-running");
     },
 
-    displayContainer: function(visibleConatinerId) {
-        this.updateContainerVisibility(this.loadingContainerElement, visibleConatinerId);
-        this.updateContainerVisibility(this.notRunningContainerElement, visibleConatinerId);
-        this.updateContainerVisibility(this.runningContainerElement, visibleConatinerId);
+    showContainer: function(idToShow) {
+        var allContainers = document.querySelectorAll(".container");
+        var allContainersCount = allContainers.length;
+        for (var i = 0; i < allContainersCount; i++) {
+            var containerElement = allContainers[i];
+            if (containerElement.id === idToShow) {
+                containerElement.classList.remove("hidden");
+            } else {
+                containerElement.classList.add("hidden");
+            }
+        }
     },
-
-    updateContainerVisibility: function(containerElement, visibleContainerId) {
-        if (containerElement.id === visibleContainerId)
-            containerElement.classList.remove("hidden");
-        else
-            containerElement.classList.add("hidden");
-    }
 }
 
 var fire = undefined;
