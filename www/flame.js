@@ -1,3 +1,23 @@
+var API = function() {};
+
+API.prototype = {
+    get: function(url, callback) {
+        var request = new XMLHttpRequest();
+        request.responseType = "json";
+        request.addEventListener("load", function() {
+            if (request.status !== 200) {
+                console.error("Request to " + url + " failed with status " + request.status);
+            } else {
+                callback(request.response);
+            }
+        });
+        request.open("GET", url, true);
+        request.send();
+    },
+}
+
+var api = new API();
+
 var Unicorn = function() {};
 
 Unicorn.prototype = {
@@ -66,25 +86,7 @@ Unicorn.prototype = {
     },
 }
 
-var API = function() {};
-
-API.prototype = {
-    get: function(url, callback) {
-        var request = new XMLHttpRequest();
-        request.responseType = "json";
-        request.addEventListener("load", function() {
-            if (request.status !== 200) {
-                console.error("Request to " + url + " failed with status " + request.status);
-            } else {
-                callback(request.response);
-            }
-        });
-        request.open("GET", url, true);
-        request.send();
-    }
-}
-
-var api = new API();
+var unicorn = new Unicorn();
 
 var Fire = function() {
     this.running = false;
@@ -93,10 +95,6 @@ var Fire = function() {
     this.currentAverageScore = undefined;
 
     this.domCoalescingTimer = undefined;
-
-    this.loadingContainerElement = document.getElementById("loading");
-    this.notRunningContainerElement = document.getElementById("not-running");
-    this.runningContainerElement = document.getElementById("running");
 };
 
 Fire.prototype = {
@@ -158,16 +156,4 @@ Fire.prototype = {
     },
 }
 
-var fire = undefined;
-
-document.addEventListener("DOMContentLoaded", function() {
-    var unicorn = new Unicorn();
-    unicorn.unicornItUp();
-
-    fire = new Fire();
-
-    window.setInterval(function() {
-        fire.updateStatus();
-    }, 10 * 1000);
-    fire.updateStatus();
-}, false);
+var fire = new Fire();
