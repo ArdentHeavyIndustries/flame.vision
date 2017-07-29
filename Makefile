@@ -11,6 +11,10 @@ initpasswd:
 initcache:
 	mkdir -p cache
 
+initfire: initdb initpasswd initcache
+	sudo chown fire:fire 🔥.db passwd cache
+	sudo mv 🔥.db passwd cache ~/fire
+
 deploy:
 	sudo cp -r ./www/* ~fire/www/
 	sudo chown -R fire:fire ~fire/www/

@@ -99,6 +99,13 @@ Because Paul doesn't want a goddamn B on SSL Labs, create a Diffie-Hellman group
 	apt-get sqlite3 sqlite3-doc
 	apt-get install lua5.1 lua-json lua-sql-sqlite3 lua-cgi
 
+#### Initialize secondary files in the fire directory
+
+This will create an initialized database, password file to guard the admin page, and cache directory for storing compressed resources.
+
+	cd ~/flame.vision
+	make initfire
+
 #### Configure a systemd job
 
 	cd
