@@ -1,28 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="styles.css">
-    <title>
-    Radiance @ Admin
-    </title>
+    <title>Radiance @ Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1.0">
 </head>
-<script language="javascript" src="flame.js"></script>
-<body onload="randomColorDark()">
-<script>
-    function Submit() {
-          document.getElementById("myForm").submit();
-          document.write("hello");
-    }
-</script>
+<body>
 <div>
     <center>
-        <p class="uppercase">🔥 Player:</p>
-        <form method="post" id="playerForm">
-            <textarea name="alias" class="uppercase" maxlength="140">alias</textarea>
+        <form method="get" action="admin.cgi">
+            <label for="running">Status</label>
+            <select name="running" id="running">
+                <option value="true">Running</option>
+                <option value="false">Not Running</option>
+            </select>
+            <input type="submit" value="Update">
         </form>
-        <p class="uppercase" id="submit" onclick="Submit()">Submit</p>
     </center>
 </div>
 </body>
