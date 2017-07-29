@@ -2,6 +2,8 @@ runlocal: initcache
 	@echo "Starting server on 127.0.0.1:62832..."
 	lighttpd -D -f config/dev.conf
 
+init: initdb initpasswd initcache
+
 initdb:
 	sqlite3 🔥.db < config/initdb.sql
 
@@ -11,9 +13,9 @@ initpasswd:
 initcache:
 	mkdir -p cache
 
-initfire: initdb initpasswd initcache
+initfire: init
 	sudo chown fire:fire 🔥.db passwd cache
-	sudo mv 🔥.db passwd cache ~/fire
+	sudo mv 🔥.db passwd cache ~fire
 
 deploy:
 	sudo cp -r ./www/* ~fire/www/
