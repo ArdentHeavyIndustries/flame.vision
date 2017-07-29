@@ -1,0 +1,10 @@
+[Unit]
+Description=flame.vision Web Server
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/lighttpd -f /home/ardent/flame.vision/config/prod.conf -D
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=http-daemon.target
