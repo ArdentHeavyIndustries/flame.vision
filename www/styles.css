@@ -28,12 +28,16 @@ textarea {
     color: #444;
 }
 
-a, a:visited{
-     color: #333;
-}
-
 a {
     text-decoration: underline;
+}
+
+p {
+    min-height: 100px;
+}
+
+p.single-line {
+    height: 100px;
 }
 
 .uppercase {
@@ -42,4 +46,11 @@ a {
 
 .container.hidden {
     display: none;
+}
+
+.ardent {
+    width: 297px;
+    height: 80px;
+    display: inline-block;
+    margin: 10px auto 0 auto;
 }
