@@ -12,18 +12,28 @@
             color: #ddd;
         }
     </style>
+    <script>
+        function setRunning(status) {
+            api.get("admin.cgi?running=" + status, function() {
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("running-button").addEventListener("click", function() {
+                setRunning("true");
+            });
+
+            document.getElementById("not-running-button").addEventListener("click", function() {
+                setRunning("false");
+            });
+        }, false);
+    </script>
 </head>
 <body>
 <div>
     <p>
-        <form method="get" action="admin.cgi">
-            <label for="running">Status</label>
-            <select name="running" id="running">
-                <option value="true">Running</option>
-                <option value="false">Not Running</option>
-            </select>
-            <input type="submit" value="Update">
-        </form>
+        <input id="running-button" type="button" value="Running">
+        <input id="not-running-button" type="button" value="Not Running">
     </p>
 </div>
 </body>
