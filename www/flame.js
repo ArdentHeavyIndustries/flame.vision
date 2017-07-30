@@ -136,7 +136,7 @@ Unicorn.prototype = {
         var h;
         var isUnique = false;
 
-        if (this.priorHues.count >= 5) {
+        if (this.priorHues.length >= 5) {
             this.priorHues = new Array();
         }
 
