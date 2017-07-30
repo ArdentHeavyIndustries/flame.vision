@@ -189,6 +189,7 @@ Fire.prototype = {
 
         var request = api.get("/status.cgi", function(status) {
             window.clearTimeout(self.statusTimeout);
+            self.statusTimeout = undefined;
 
             var running = self.stringToBoolean(status["running"]);
             if (running !== undefined)
