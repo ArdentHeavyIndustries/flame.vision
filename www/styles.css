@@ -28,8 +28,18 @@ textarea {
     color: #444;
 }
 
-a, #cookie-notice input {
+a, input[type=button] {
     text-decoration: underline;
+}
+
+input[type=button] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: inherit;
+    font-size: 24px;
 }
 
 p {
@@ -62,16 +72,6 @@ p {
     line-height: 36px;
     background-color: #333;
     color: #ccc;
-}
-
-#cookie-notice input {
-    -webkit-appearance: none;
-    appearance: none;
-    background: none;
-    border: none;
-    color: inherit;
-    font-weight: inherit;
-    font-size: 24px;
 }
 
 #cookie-notice div {
