@@ -9,6 +9,24 @@
 <script language="javascript" src="flame.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    var cookieNoticeElement = document.getElementById("cookie-notice");
+    var moreCookieInfoButton = document.getElementById("more-cookie-info-button");
+    var cookieAcceptButton = document.getElementById("cookie-accept-button");
+
+    cookieAcceptButton.addEventListener("click", function() {
+        window.localStorage.setItem("acceptedCookiePolicy", "true");
+        cookieNoticeElement.classList.add("hidden");
+    });
+
+    moreCookieInfoButton.addEventListener("click", function() {
+        moreCookieInfoButton.classList.add("hidden");
+        document.getElementById("more-cookie-notice").classList.remove("hidden");
+    });
+
+    if (window.localStorage.getItem("acceptedCookiePolicy") !== "true") {
+        cookieNoticeElement.classList.remove("hidden");
+    }
+
     unicorn.unicornItUp();
 
     window.setInterval(function() {
@@ -18,6 +36,11 @@ document.addEventListener("DOMContentLoaded", function() {
 }, false);
 </script>
 <body>
+<div id="cookie-notice" class="hidden">
+    <div>flame.vision uses cookies to help count votes. We don't use cookies for marketing or any other tracking reasons. Is that cool with you?</div>
+    <div id="more-cookie-notice" class="hidden">We assign each visitor a random number and store it in a cookie to keep track of your votes. The random number will expire on September 1, 2017. We may use these identifiers for analytics (such as answering "how many people voted?") or to detect cheaters (please don't do this). But we won't use these identifiers for any kind of commercial or marketing purposes. Oh, we also use local storage to record if you accept this cookie. If you don't accept this, please don't use flame.vision</div>
+    <div><input id="more-cookie-info-button" type="button" value="More Info"><input id="cookie-accept-button" type="button" value="Okay"></div>
+</div>
 <div id="loading" class="container">
     <p>THIS IS IT</p>
     <p>STAND BY</p>

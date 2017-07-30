@@ -28,12 +28,14 @@ textarea {
     color: #444;
 }
 
-a {
+a, #cookie-notice input {
     text-decoration: underline;
 }
 
 p {
     min-height: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 p.single-line {
@@ -44,7 +46,7 @@ p.single-line {
     text-transform: uppercase;
 }
 
-.container.hidden {
+.hidden {
     display: none;
 }
 
@@ -53,4 +55,26 @@ p.single-line {
     height: 80px;
     display: inline-block;
     margin: 10px auto 0 auto;
+}
+
+#cookie-notice {
+    font-size: 24px;
+    line-height: 36px;
+    background-color: #333;
+    color: #ccc;
+}
+
+#cookie-notice input {
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: inherit;
+    font-size: 24px;
+}
+
+#cookie-notice div {
+    padding-left: 20px;
+    padding-right: 20px;
 }
