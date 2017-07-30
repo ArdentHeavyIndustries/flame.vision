@@ -123,41 +123,22 @@ LocalizedStringManager.prototype = {
 
 localizedStringManager = new LocalizedStringManager();
 
-var Unicorn = function() {};
+var Unicorn = function() {
+    this.priorHues = new Array();
+};
 
 Unicorn.prototype = {
-    unicornItUp: function() {
-        var containerElements = document.querySelectorAll(".container");
-        var containerElementCount = containerElements.length;
-        for (var i = 0; i < containerElementCount; i++) {
-            this._clearPriorHues();
-            var containerElement = containerElements[i];
-            this._randomizeParagraphColors(containerElement);
-        }
-
-        this._clearPriorHues();
-        document.body.style.backgroundColor = this._randomHSL(false, new Array());
+    unicornUpThatBody: function() {
+        document.body.style.backgroundColor = this.nextUnicornHSLString();
     },
 
-    _clearPriorHues: function() {
-        this.priorHues = new Array();
-    },
-
-    _randomizeParagraphColors: function(containerElement) {
-        var isDark = false;
-        var paragraphs = containerElement.getElementsByTagName("p");
-
-        for (var i = 0; i < paragraphs.length; i++) {
-            paragraphs[i].style.backgroundColor = this._randomHSL(isDark);
-            if (isDark) {
-                paragraphs[i].style.color = "grey";
-            }
-        }
-    },
-
-    _randomHSL: function(isDark) {
+    nextUnicornHSLString: function(isDark) {
         var h;
         var isUnique = false;
+
+        if (this.priorHues.count >= 5) {
+            this.priorHues = new Array();
+        }
 
         while(!isUnique) {
             var i;
@@ -283,6 +264,7 @@ Fire.prototype = {
         if (id) {
             rowElement.id = id;
         }
+        rowElement.style.backgroundColor = unicorn.nextUnicornHSLString();
 
         if (typeof(contents) === "string") {
             rowElement.innerText = contents;
