@@ -69,6 +69,8 @@ API.prototype = {
         });
         request.open("GET", url, true);
         request.send();
+
+        return request;
     },
 }
 
@@ -201,9 +203,12 @@ var Fire = function() {
 };
 
 Fire.prototype = {
-    updateStatus: function() {
+    pollStatus: function() {
         var self = this;
-        api.get("/status.cgi", function(status) {
+
+        var request = api.get("/status.cgi", function(status) {
+            window.clearTimeout(self.statusTimeout);
+
             var running = self.stringToBoolean(status["running"]);
             if (running !== undefined)
                 self.running = running;
@@ -212,7 +217,16 @@ Fire.prototype = {
                 self.currentPlayer = status["currentplayer"];
 
             self.reloadCurrentScreen();
+
+            window.setTimeout(function() {
+                self.pollStatus();
+            }, 10 * 1000);
         });
+
+        this.statusTimeout = window.setTimeout(function() {
+            request.abort();
+            self.pollStatus();
+        }, 30 * 1000);
     },
 
     stringToBoolean: function(string) {
