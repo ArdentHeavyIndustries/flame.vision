@@ -249,7 +249,9 @@ Fire.prototype = {
         this.addRowWithLocalizedStringKey("not_running_dates");
         this.addRowWithLocalizedStringKey("not_running_times");
         this.addRowWithLocalizedStringKey("not_running_weather_notice");
+
         this.addArdentLogoRow();
+        this.addLanguageSelectionRow();
     },
 
     removeAllRows: function() {
@@ -336,7 +338,29 @@ Fire.prototype = {
         aElement.appendChild(imageElement);
 
         this.addRowWithContents(aElement, "ardent-logo");
-    }
+    },
+
+    addLanguageSelectionRow: function() {
+        var self = this;
+
+        var englishButton = document.createElement("input");
+        englishButton.type = "button";
+        englishButton.value = "English";
+        englishButton.addEventListener("click", function() {
+            localizedStringManager.setLanguage(0);
+            self.reloadCurrentScreen();
+        });
+
+        var danishButton = document.createElement("input");
+        danishButton.type = "button";
+        danishButton.value = "Dansk";
+        danishButton.addEventListener("click", function() {
+            localizedStringManager.setLanguage(1);
+            self.reloadCurrentScreen();
+        });
+
+        this.addRowWithContents([englishButton, danishButton]);
+    },
 }
 
 var fire = new Fire();
