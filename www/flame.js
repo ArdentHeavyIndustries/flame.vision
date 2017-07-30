@@ -28,7 +28,7 @@ var localizedStrings = {
     ""
   ],
   "not_running_title": [
-    "🔥 Radiance @ Smukfest 🇩🇰",
+    "Radiance @ Smukfest",
     ""
   ],
   "not_running_weather_notice": [
