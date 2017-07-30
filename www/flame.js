@@ -49,6 +49,11 @@ var localizedStrings = {
   ]
 };
 
+Element.prototype.remove = function() {
+    var parent = this.parentElement;
+    parent.removeChild(this);
+}
+
 var API = function() {};
 
 API.prototype = {
@@ -206,7 +211,7 @@ Fire.prototype = {
             if (typeof(status["currentplayer"]) === "string")
                 self.currentPlayer = status["currentplayer"];
 
-            self.updateDOMSoon();
+            self.reloadCurrentScreen();
         });
     },
 
@@ -219,38 +224,98 @@ Fire.prototype = {
             return undefined;
     },
 
-    updateDOMSoon: function() {
-        if (this.domCoalescingTimer)
-            return;
-        var self = this;
-        this.domCoalescingTimer = window.setTimeout(function() {
-            self.updateDOMNow();
-        })
+    showLoadingScreen: function() {
+        this.removeAllRows();
+        this.addRowWithLocalizedStringKey("loading_placeholder");
     },
 
-    updateDOMNow: function() {
-        if (this.domCoalescingTimer)
-            window.clearTimeout(this.domCoalescingTimer);
-        this.domCoalescingTimer = undefined;
-
+    reloadCurrentScreen: function(idToShow) {
+        this.removeAllRows();
         if (this.running) {
-            this.showContainer("running");
-            document.getElementById("currentPlayer").innerText = this.currentPlayer;
-        } else
-            this.showContainer("not-running");
+            this.showRunningScreen();
+        } else {
+            this.showNotRunningScreen();
+        }
     },
 
-    showContainer: function(idToShow) {
-        var allContainers = document.querySelectorAll(".container");
-        var allContainersCount = allContainers.length;
-        for (var i = 0; i < allContainersCount; i++) {
-            var containerElement = allContainers[i];
-            if (containerElement.id === idToShow) {
-                containerElement.classList.remove("hidden");
-            } else {
-                containerElement.classList.add("hidden");
+    showRunningScreen: function() {
+        this.addCookieNoticeRowIfNecessary();
+    },
+
+    showNotRunningScreen: function() {
+        this.addCookieNoticeRowIfNecessary();
+    },
+
+    removeAllRows: function() {
+        var containerElement = document.getElementById("container");
+        var parentElement = containerElement.parentElement;
+
+        var newContainerElement = document.createElement("div");
+        newContainerElement.id = "container";
+        parentElement.replaceChild(newContainerElement, containerElement);
+    },
+
+    addRowWithContents: function(id, contents) {
+        var rowElement = document.createElement("div");
+        rowElement.className = "row";
+        if (id) {
+            rowElement.id = id;
+        }
+
+        if (typeof(contents) === "string") {
+            rowElement.innerText = contents;
+        } else if (typeof(contents) === "object" && Array.isArray(contents)) {
+            var itemCount = contents.length;
+            // TODO: Should we not assume all items are Elements?
+            for (var i = 0; i < itemCount; i++) {
+                var childElement = contents[i];
+                rowElement.appendChild(childElement);
             }
         }
+
+        var containerElement = document.getElementById("container");
+        containerElement.appendChild(rowElement);
+    },
+
+    addRowWithLocalizedStringKey: function(id, key) {
+        var localizedString = localizedStringManager.localizedStringForKey(key);
+        this.addRowWithContents(id, localizedString);
+    },
+
+    addCookieNoticeRowIfNecessary: function() {
+        if (window.localStorage.getItem("acceptedCookiePolicy") === "true") {
+            return;
+        }
+
+        var descriptionElement = document.createElement("div");
+        descriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_short");
+
+        var moreDescriptionElement = document.createElement("div");
+        moreDescriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_expanded");
+        moreDescriptionElement.className = "hidden";
+
+        var buttonContainerDivElement = document.createElement("div");
+
+        var moreInfoButton = document.createElement("input");
+        moreInfoButton.type = "button";
+        moreInfoButton.value = localizedStringManager.localizedStringForKey("cookie_expand_button");
+        moreInfoButton.addEventListener("click", function() {
+            moreInfoButton.remove();
+            moreDescriptionElement.classList.remove("hidden");
+        });
+
+        var acceptCookiesButton = document.createElement("input");
+        acceptCookiesButton.type = "button";
+        acceptCookiesButton.value = localizedStringManager.localizedStringForKey("cookie_accept_button");
+        acceptCookiesButton.addEventListener("click", function() {
+            document.getElementById("cookie-notice").remove();
+            window.localStorage.setItem("acceptedCookiePolicy", "true");
+        });
+
+        buttonContainerDivElement.appendChild(moreInfoButton);
+        buttonContainerDivElement.appendChild(acceptCookiesButton);
+
+        this.addRowWithContents("cookie-notice", [descriptionElement, moreDescriptionElement, buttonContainerDivElement]);
     },
 }
 
