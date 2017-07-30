@@ -244,6 +244,12 @@ Fire.prototype = {
 
     showNotRunningScreen: function() {
         this.addCookieNoticeRowIfNecessary();
+
+        this.addRowWithLocalizedStringKey("not_running_title");
+        this.addRowWithLocalizedStringKey("not_running_dates");
+        this.addRowWithLocalizedStringKey("not_running_times");
+        this.addRowWithLocalizedStringKey("not_running_weather_notice");
+        this.addArdentLogoRow();
     },
 
     removeAllRows: function() {
@@ -255,7 +261,7 @@ Fire.prototype = {
         parentElement.replaceChild(newContainerElement, containerElement);
     },
 
-    addRowWithContents: function(id, contents) {
+    addRowWithContents: function(contents, id) {
         var rowElement = document.createElement("div");
         rowElement.className = "row";
         if (id) {
@@ -271,15 +277,17 @@ Fire.prototype = {
                 var childElement = contents[i];
                 rowElement.appendChild(childElement);
             }
+        } else if (typeof(contents) === "object") {
+            rowElement.appendChild(contents);
         }
 
         var containerElement = document.getElementById("container");
         containerElement.appendChild(rowElement);
     },
 
-    addRowWithLocalizedStringKey: function(id, key) {
+    addRowWithLocalizedStringKey: function(key, id) {
         var localizedString = localizedStringManager.localizedStringForKey(key);
-        this.addRowWithContents(id, localizedString);
+        this.addRowWithContents(localizedString, id);
     },
 
     addCookieNoticeRowIfNecessary: function() {
@@ -315,8 +323,20 @@ Fire.prototype = {
         buttonContainerDivElement.appendChild(moreInfoButton);
         buttonContainerDivElement.appendChild(acceptCookiesButton);
 
-        this.addRowWithContents("cookie-notice", [descriptionElement, moreDescriptionElement, buttonContainerDivElement]);
+        this.addRowWithContents([descriptionElement, moreDescriptionElement, buttonContainerDivElement], "cookie-notice");
     },
+
+    addArdentLogoRow: function() {
+        var imageElement = document.createElement("img");
+        imageElement.src = "ardent.png";
+        imageElement.alt = "Ardent Heavy Industries";
+
+        var aElement = document.createElement("a");
+        aElement.href = "http://www.ardentheavyindustries.com/";
+        aElement.appendChild(imageElement);
+
+        this.addRowWithContents(aElement, "ardent-logo");
+    }
 }
 
 var fire = new Fire();
