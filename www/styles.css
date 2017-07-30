@@ -38,10 +38,6 @@ p {
     padding-right: 20px;
 }
 
-p.single-line {
-    height: 100px;
-}
-
 .uppercase {
     text-transform: uppercase;
 }
@@ -50,11 +46,15 @@ p.single-line {
     display: none;
 }
 
-.ardent {
+#ardent-logo img {
     width: 297px;
     height: 80px;
     display: inline-block;
     margin: 10px auto 0 auto;
+}
+
+#ardent-logo {
+    height: 100px;
 }
 
 #cookie-notice {
