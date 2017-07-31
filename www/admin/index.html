@@ -10,31 +10,67 @@
         body {
             background-color: #222;
             color: #ddd;
+            line-height: 36px;
+            font-size: 24px;
+        }
+        p {
+            min-height: 0;
+        }
+        label:after {
+            content: ": ";
+        }
+        output {
+            font-weight: normal;
         }
     </style>
     <script>
-        function setRunning(status) {
-            api.get("admin.cgi?running=" + status, function() {
-            });
+        var Admin = function() {
+            this.statusTimer = undefined;
+        };
+
+        Admin.prototype = {
+            updateStatus: function(status) {
+                document.getElementById("current-status-running").innerText = status["running"];
+            },
+
+            setRunning: function(running) {
+                api.get("admin.cgi?running=" + running, function() {
+                    fire.pollStatus();
+                });
+            },
         }
+
+        var admin = new Admin();
 
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("running-button").addEventListener("click", function() {
-                setRunning("true");
+                admin.setRunning("true");
             });
 
             document.getElementById("not-running-button").addEventListener("click", function() {
-                setRunning("false");
+                admin.setRunning("false");
             });
+
+            fire.statusCallback = function(status) {
+                admin.updateStatus(status);
+            };
+            fire.pollStatus();
         }, false);
     </script>
 </head>
 <body>
-<div>
-    <p>
-        <input id="running-button" type="button" value="Running">
-        <input id="not-running-button" type="button" value="Not Running">
+<div id="current-status">
+    <p><label for="current-status-currentplayer">Current Player</label>
+    <output id="current-status-currentplayer"></output>
     </p>
+<p>
+    <label for="current-status-currentplayer">Running</label>
+    <output id="current-status-running"></output>
+    </p>
+</div>
+<div>
+    <input id="running-button" type="button" value="Running">
+    <input id="not-running-button" type="button" value="Not Running">
 </div>
 </body>
 </html>

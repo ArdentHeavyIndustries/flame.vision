@@ -180,25 +180,26 @@ var Fire = function() {
     this.currentPlayer = undefined;
     this.currentAverageScore = undefined;
 
-    this.domCoalescingTimer = undefined;
+    this.statusRequest = undefined;
+    this.statusNextUpdateTimer = undefined;
+    this.statusTimeoutTimer = undefined;
 };
 
 Fire.prototype = {
     pollStatus: function() {
         var self = this;
 
-        var request = api.get("/status.cgi", function(status) {
-            window.clearTimeout(self.statusTimeout);
-            self.statusTimeout = undefined;
+        if (this.statusRequest) {
+            return;
+        }
 
-            var running = self.stringToBoolean(status["running"]);
-            if (running !== undefined)
-                self.running = running;
+        this.clearStatusTimeoutTimer();
 
-            if (typeof(status["currentplayer"]) === "string")
-                self.currentPlayer = status["currentplayer"];
+        this.statusRequest == api.get("/status.cgi", function(status) {
+            self.clearStatusTimeoutTimer();
+            self.statusRequest = undefined;
 
-            self.reloadCurrentScreen();
+            self.statusCallback(status);
 
             window.setTimeout(function() {
                 self.pollStatus();
@@ -206,9 +207,28 @@ Fire.prototype = {
         });
 
         this.statusTimeout = window.setTimeout(function() {
-            request.abort();
+            self.statusRequest.abort();
+            this.statusRequest = undefined;
             self.pollStatus();
         }, 30 * 1000);
+    },
+
+    clearStatusTimeoutTimer: function() {
+        if (this.statusTimeoutTimer) {
+            window.clearTimeout(this.statusTimeoutTimer);
+            this.statusTimeoutTimer = undefined;
+        }
+    },
+
+    statusCallback: function(status) {
+        var running = this.stringToBoolean(status["running"]);
+        if (running !== undefined)
+            this.running = running;
+
+        if (typeof(status["currentplayer"]) === "string")
+            this.currentPlayer = status["currentplayer"];
+
+        this.reloadCurrentScreen();
     },
 
     stringToBoolean: function(string) {
