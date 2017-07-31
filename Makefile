@@ -20,3 +20,5 @@ initfire: init
 deploy:
 	sudo cp -r ./www/* ~fire/www/
 	sudo chown -R fire:fire ~fire/www/
+	sudo cp -r ./notwww/* ~fire/notwww/
+	sudo chown -R fire:fire ~fire/notwww/
