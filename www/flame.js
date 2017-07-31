@@ -35,12 +35,16 @@ var localizedStrings = {
     "(weather permitting)",
     ""
   ],
-  "player_name_placeholder": [
-    "@player1",
+  "player_name_title": [
+    "Currently Playing",
     ""
   ],
-  "player_ranking_title": [
-    "How Awesome?",
+  "player_name_no_player": [
+    "No Player",
+    ""
+  ],
+  "vote_title": [
+    "Vote",
     ""
   ],
   "website_title": [
@@ -256,6 +260,14 @@ Fire.prototype = {
 
     showRunningScreen: function() {
         this.addCookieNoticeRowIfNecessary();
+
+        this.addRowWithLocalizedStringKey("player_name_title");
+        this.addCurrentPlayerRow();
+        this.addRowWithLocalizedStringKey("vote_title");
+        this.addVotingRow();
+
+        this.addArdentLogoRow();
+        this.addLanguageSelectionRow();
     },
 
     showNotRunningScreen: function() {
@@ -343,6 +355,19 @@ Fire.prototype = {
         buttonContainerDivElement.appendChild(acceptCookiesButton);
 
         this.addRowWithContents([descriptionElement, moreDescriptionElement, buttonContainerDivElement], "cookie-notice");
+    },
+
+    addCurrentPlayerRow: function() {
+        var currentPlayer = localizedStringManager.localizedStringForKey("player_name_no_player");
+        if (this.currentPlayer && this.currentPlayer.length > 0) {
+            currentPlayer = this.currentPlayer;
+        };
+
+        this.addRowWithContents(currentPlayer);
+    },
+
+    addVotingRow: function() {
+
     },
 
     addArdentLogoRow: function() {
