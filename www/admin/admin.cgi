@@ -50,7 +50,17 @@ if k == "currentplayer" then
     drv = assert(require "luasql.sqlite3")
     dbenv = assert(drv.sqlite3())
     db = assert(dbenv:connect("../../🔥.db"))
+    sql = "SELECT value FROM status WHERE thing=\"currentplayer\";"
+    cur = db:execute(sql)
+    player = cur:fetch()
+    sql = "SELECT value FROM status WHERE thing=\"currentavg\";"
+    cur = db:execute(sql)
+    avg = cur:fetch()
+    sql = string.format("INSERT INTO leaders VALUES(\"%s\", \"%s\");", player, avg)
+    db:execute(sql)
     sql = "DELETE FROM status WHERE thing=\"currentplayer\";"
+    db:execute(sql)
+    sql = "DELETE FROM rate;"
     db:execute(sql)
     sql = string.format("INSERT INTO status VALUES(\"currentplayer\", \"%s\");", v)
     db:execute(sql)
