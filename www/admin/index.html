@@ -30,6 +30,8 @@
 
         Admin.prototype = {
             updateStatus: function(status) {
+                document.getElementById("current-status-currentplayer").innerText = status["currentplayer"];
+                document.getElementById("current-status-currentaverage").innerText = status["currentavg"];
                 document.getElementById("current-status-running").innerText = status["running"];
             },
 
@@ -60,15 +62,21 @@
 </head>
 <body>
 <div id="current-status">
-    <p><label for="current-status-currentplayer">Current Player</label>
-    <output id="current-status-currentplayer"></output>
+    <p>
+        <label for="current-status-currentplayer">Current Player</label>
+        <output id="current-status-currentplayer"></output>
     </p>
-<p>
-    <label for="current-status-currentplayer">Running</label>
-    <output id="current-status-running"></output>
+    <p>
+        <label for="current-status-currentaverage">Current Average</label>
+        <output id="current-status-currentaverage"></output>
+    </p>
+    <p>
+        <label for="current-status-running">Running</label>
+        <output id="current-status-running"></output>
     </p>
 </div>
 <div>
+    <h3>Set Status</h3>
     <input id="running-button" type="button" value="Running">
     <input id="not-running-button" type="button" value="Not Running">
 </div>
