@@ -3,7 +3,7 @@
 <head>
     <title>Radiance @ Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content="width=375, user-scalable=no">
     <link rel="stylesheet" href="../styles.css">
     <script src="../flame.js"></script>
     <style type="text/css">
@@ -21,6 +21,20 @@
         }
         output {
             font-weight: normal;
+        }
+        h3, label {
+            margin-top: 12px;
+            font-size: 18px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+        input[type=button] {
+            padding: 0;
+            margin: 0;
+        }
+        input[type=text] {
+            font-size: 18px;
+            width: 240px;
         }
     </style>
     <script>
@@ -40,6 +54,12 @@
                     fire.pollStatus();
                 });
             },
+
+            setPlayer: function(player) {
+                api.get("admin.cgi?currentplayer=" + encodeURIComponent(player), function() {
+                    fire.pollStatus();
+                });
+            },
         }
 
         var admin = new Admin();
@@ -51,6 +71,19 @@
 
             document.getElementById("not-running-button").addEventListener("click", function() {
                 admin.setRunning("false");
+            });
+
+            document.getElementById("clear-player-textfield-button").addEventListener("click", function() {
+                document.getElementById("set-player-textfield").value = "";
+            });
+
+            document.getElementById("set-player-button").addEventListener("click", function() {
+                var playerName = document.getElementById("set-player-textfield").value.trim();
+                admin.setPlayer(playerName);
+            });
+
+            document.getElementById("clear-player-button").addEventListener("click", function() {
+                admin.setPlayer("");
             });
 
             fire.statusCallback = function(status) {
@@ -76,9 +109,26 @@
     </p>
 </div>
 <div>
+    <h3>Set Player</h3>
+    <p>
+        <input type="text" id="set-player-textfield">
+        <input type="button" id="clear-player-textfield-button" value="×">
+    </p>
+    <p>
+        <input id="set-player-button" type="button" value="Set Player">
+    </p>
+    <p>
+        <input id="clear-player-button" type="button" value="Remove Player">
+    </p>
+</div>
+<div>
     <h3>Set Status</h3>
-    <input id="running-button" type="button" value="Running">
-    <input id="not-running-button" type="button" value="Not Running">
+    <p>
+        <input id="running-button" type="button" value="Running">
+    </p>
+    <p>
+        <input id="not-running-button" type="button" value="Not Running">
+    </p>
 </div>
 </body>
 </html>
