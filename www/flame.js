@@ -291,13 +291,16 @@ Fire.prototype = {
         parentElement.replaceChild(newContainerElement, containerElement);
     },
 
-    addRowWithContents: function(contents, id) {
+    addRowWithContents: function(contents, id, noColor) {
         var rowElement = document.createElement("div");
         rowElement.className = "row";
         if (id) {
             rowElement.id = id;
         }
-        rowElement.style.backgroundColor = unicorn.nextUnicornHSLString();
+
+        if (!noColor) {
+            rowElement.style.backgroundColor = unicorn.nextUnicornHSLString();
+        }
 
         if (typeof(contents) === "string") {
             rowElement.innerText = contents;
@@ -354,7 +357,7 @@ Fire.prototype = {
         buttonContainerDivElement.appendChild(moreInfoButton);
         buttonContainerDivElement.appendChild(acceptCookiesButton);
 
-        this.addRowWithContents([descriptionElement, moreDescriptionElement, buttonContainerDivElement], "cookie-notice");
+        this.addRowWithContents([descriptionElement, moreDescriptionElement, buttonContainerDivElement], "cookie-notice", true);
     },
 
     addCurrentPlayerRow: function() {
