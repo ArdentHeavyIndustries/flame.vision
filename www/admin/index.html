@@ -34,7 +34,7 @@
         }
         input[type=text] {
             font-size: 18px;
-            width: 240px;
+            width: 300px;
         }
     </style>
     <script>
@@ -73,13 +73,14 @@
                 admin.setRunning("false");
             });
 
-            document.getElementById("clear-player-textfield-button").addEventListener("click", function() {
-                document.getElementById("set-player-textfield").value = "";
-            });
-
             document.getElementById("set-player-button").addEventListener("click", function() {
                 var playerName = document.getElementById("set-player-textfield").value.trim();
                 admin.setPlayer(playerName);
+            });
+
+            var setPlayerTextFieldElement = document.getElementById("set-player-textfield");
+            setPlayerTextFieldElement.addEventListener("focus", function() {
+                setPlayerTextFieldElement.value = "";
             });
 
             fire.statusCallback = function(status) {
@@ -108,7 +109,6 @@
     <h3>Set Player</h3>
     <p>
         <input type="text" id="set-player-textfield">
-        <input type="button" id="clear-player-textfield-button" value="×">
     </p>
     <p>
         <input id="set-player-button" type="button" value="Set Player">
