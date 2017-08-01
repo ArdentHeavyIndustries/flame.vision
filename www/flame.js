@@ -210,9 +210,9 @@ Fire.prototype = {
             }, 10 * 1000);
         });
 
-        this.statusTimeout = window.setTimeout(function() {
+        this.statusTimeoutTimer = window.setTimeout(function() {
             self.statusRequest.abort();
-            this.statusRequest = undefined;
+            self.statusRequest = undefined;
             self.pollStatus();
         }, 30 * 1000);
     },
