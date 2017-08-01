@@ -1,51 +1,51 @@
 var localizedStrings = {
   "cookie_accept_button": [
     "Okay",
-    ""
+    "OK"
   ],
   "cookie_expand_button": [
     "More Info",
-    ""
+    "Mere info"
   ],
   "cookie_expanded": [
     "We assign each visitor a random number and store it in a cookie to keep track of your votes. The random number will expire on September 1, 2017. We may use these identifiers for analytics (such as answering \"how many people voted?\") or to detect cheaters (please don't do this). But we won't use these identifiers for any kind of commercial or marketing purposes. Oh, we also use local storage to record if you accept this cookie. If you don't accept this, please don't use flame.vision",
-    ""
+    "Vi tildeler hver besøgende et tilfældigt nummer og gemmer det i en cookie for at kunne holde styr på dine afgivne stemmer. det tilfældige nummer vil udløbe den 1. september 2017. Vi kan bruge denne identifikation til analyse (såsom at få svar på: \"hvor mange personer har stemt?\") eller for at opdage snyd (please, lad vær at snyde). Men vi bruger ikke denne identifikation til nogen former for kommercielt eller markedsførings øjemed. Nå ja, vi anvender også lokal datalagring for at registrere, hvis du accepterer denne cookie. Hvis ikke du accepterer dette, så brug venligst ikke flame.vision"
   ],
   "cookie_short": [
     "flame.vision uses cookies to help count votes. We don't use cookies for marketing or any other tracking reasons. Is that cool with you?",
-    ""
+    "flame.vision anvender alene cookies for at kunne tælle point. Vi bruger ikke cookies til nogen form for markedsføring elle andre formål. Er det cool med dig?"
   ],
   "loading_placeholder": [
     "STAND BY",
-    ""
+    "standby"
   ],
   "not_running_dates": [
     "August 9 – 13",
-    ""
+    "9.-13. august"
   ],
   "not_running_times": [
     "21:00 – late",
-    ""
+    "21.00 - sent"
   ],
   "not_running_title": [
     "Radiance @ Smukfest",
-    ""
+    "Radiance @ Smukfest"
   ],
   "not_running_weather_notice": [
     "(weather permitting)",
-    ""
+    "Hvis vejret tillader det"
   ],
   "player_name_title": [
     "Currently Playing",
-    ""
+    "Spiller nu"
   ],
   "player_name_no_player": [
     "No Player",
-    ""
+    "Ingen spilelr"
   ],
   "vote_title": [
     "Vote",
-    ""
+    "Stem"
   ],
   "website_title": [
     "Radiance @ Smukfest",
