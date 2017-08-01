@@ -82,10 +82,6 @@
                 admin.setPlayer(playerName);
             });
 
-            document.getElementById("clear-player-button").addEventListener("click", function() {
-                admin.setPlayer("");
-            });
-
             fire.statusCallback = function(status) {
                 admin.updateStatus(status);
             };
@@ -116,9 +112,6 @@
     </p>
     <p>
         <input id="set-player-button" type="button" value="Set Player">
-    </p>
-    <p>
-        <input id="clear-player-button" type="button" value="Remove Player">
     </p>
 </div>
 <div>
