@@ -55,8 +55,9 @@
                 });
             },
 
-            setPlayer: function(player) {
-                api.get("admin.cgi?currentplayer=" + encodeURIComponent(player), function() {
+            setPlayer: function() {
+                var playerName = document.getElementById("set-player-textfield").value.trim();
+                api.get("admin.cgi?currentplayer=" + encodeURIComponent(playerName), function() {
                     fire.pollStatus();
                 });
             },
@@ -75,12 +76,18 @@
 
             document.getElementById("set-player-button").addEventListener("click", function() {
                 var playerName = document.getElementById("set-player-textfield").value.trim();
-                admin.setPlayer(playerName);
+                admin.setPlayer();
             });
 
             var setPlayerTextFieldElement = document.getElementById("set-player-textfield");
             setPlayerTextFieldElement.addEventListener("focus", function() {
                 setPlayerTextFieldElement.value = "";
+            });
+
+            document.getElementById("set-player-form").addEventListener("submit", function(event) {
+                setPlayerTextFieldElement.blur();
+                admin.setPlayer();
+                event.preventDefault();
             });
 
             fire.statusCallback = function(status) {
@@ -107,12 +114,14 @@
 </div>
 <div>
     <h3>Set Player</h3>
-    <p>
-        <input type="text" id="set-player-textfield">
-    </p>
-    <p>
-        <input id="set-player-button" type="button" value="Set Player">
-    </p>
+    <form id="set-player-form" action="fake.cgi">
+        <p>
+            <input type="text" id="set-player-textfield">
+        </p>
+        <p>
+            <input id="set-player-button" type="button" value="Set Player">
+        </p>
+    </form>
 </div>
 <div>
     <h3>Set Status</h3>
