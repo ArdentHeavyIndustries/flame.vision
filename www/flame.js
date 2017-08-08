@@ -179,7 +179,7 @@ Unicorn.prototype = {
 var unicorn = new Unicorn();
 
 var Fire = function() {
-    this.running = false;
+    this.running = undefined;
 
     this.currentPlayer = undefined;
     this.currentAverageScore = undefined;
@@ -187,6 +187,8 @@ var Fire = function() {
     this.statusRequest = undefined;
     this.statusNextUpdateTimer = undefined;
     this.statusTimeoutTimer = undefined;
+
+    this.domUpdateTimer = undefined;
 };
 
 Fire.prototype = {
@@ -225,14 +227,28 @@ Fire.prototype = {
     },
 
     statusCallback: function(status) {
+        var reloadScreen = false;
+
         var running = this.stringToBoolean(status["running"]);
-        if (running !== undefined)
+        if (running === undefined)
+            running = false;
+
+        var currentPlayer = status["currentplayer"];
+        if (typeof(currentPlayer) === "string" && this.currentPlayer !== currentPlayer) {
+            this.currentPlayer = currentPlayer;
+            reloadScreen = true;
+        }
+
+        if (this.running !== running) {
             this.running = running;
+            reloadScreen = true;
+        }
 
-        if (typeof(status["currentplayer"]) === "string")
-            this.currentPlayer = status["currentplayer"];
-
-        this.reloadCurrentScreen();
+        if (reloadScreen) {
+            this.reloadCurrentScreen();
+        } else {
+            this.updateDOMSoon();
+        }
     },
 
     stringToBoolean: function(string) {
@@ -256,6 +272,7 @@ Fire.prototype = {
         } else {
             this.showNotRunningScreen();
         }
+        this.updateDOMSoon();
     },
 
     showRunningScreen: function() {
@@ -291,14 +308,14 @@ Fire.prototype = {
         parentElement.replaceChild(newContainerElement, containerElement);
     },
 
-    addRowWithContents: function(contents, id, noColor) {
+    addRow: function(contents, dataKey, dataValue, id, suppressRandomColor) {
         var rowElement = document.createElement("div");
         rowElement.className = "row";
         if (id) {
             rowElement.id = id;
         }
 
-        if (!noColor) {
+        if (!suppressRandomColor) {
             rowElement.style.backgroundColor = unicorn.nextUnicornHSLString();
         }
 
@@ -315,13 +332,22 @@ Fire.prototype = {
             rowElement.appendChild(contents);
         }
 
+        if (dataKey && dataValue) {
+            rowElement.setAttribute(dataKey, dataValue);
+        }
+
         var containerElement = document.getElementById("container");
         containerElement.appendChild(rowElement);
+
+        this.updateDOMSoon();
     },
 
     addRowWithLocalizedStringKey: function(key, id) {
-        var localizedString = localizedStringManager.localizedStringForKey(key);
-        this.addRowWithContents(localizedString, id);
+        this.addRow(undefined, "data-row-localized-string-key", key, id, false);
+    },
+
+    addRowWithFunctionBinding: function(functionName, id) {
+        this.addRow(undefined, "data-row-function", functionName, id, false);
     },
 
     addCookieNoticeRowIfNecessary: function() {
@@ -329,12 +355,106 @@ Fire.prototype = {
             return;
         }
 
+        this.addRow(undefined, "data-row-function", "updateCookieNoticeRow", "cookie-notice", true);
+    },
+
+    addCurrentPlayerRow: function() {
+        this.addRowWithFunctionBinding("updateCurrentPlayerRow");
+    },
+
+    addVotingRow: function() {
+
+    },
+
+    addArdentLogoRow: function() {
+        var imageElement = document.createElement("img");
+        imageElement.src = "ardent.png";
+        imageElement.alt = "Ardent Heavy Industries";
+
+        var aElement = document.createElement("a");
+        aElement.href = "http://www.ardentheavyindustries.com/";
+        aElement.appendChild(imageElement);
+
+        this.addRow(aElement, undefined, undefined, "ardent-logo");
+    },
+
+    addLanguageSelectionRow: function() {
+        var self = this;
+
+        var englishButton = document.createElement("input");
+        englishButton.type = "button";
+        englishButton.value = "English";
+        englishButton.addEventListener("click", function() {
+            localizedStringManager.setLanguage(0);
+            self.updateDOMSoon();
+        });
+
+        var danishButton = document.createElement("input");
+        danishButton.type = "button";
+        danishButton.value = "Dansk";
+        danishButton.addEventListener("click", function() {
+            localizedStringManager.setLanguage(1);
+            self.updateDOMSoon();
+        });
+
+        this.addRow([englishButton, danishButton]);
+    },
+
+    updateDOMSoon: function() {
+        if (this.domUpdateTimer) {
+            return;
+        }
+
+        var self = this;
+        this.domUpdateTimer = window.setTimeout(function() {
+            self.updateDOMNow();
+        }, 0);
+    },
+
+    updateDOMNow: function() {
+        if (this.domUpdateTimer) {
+            window.clearTimeout(this.domUpdateTimer);
+            this.domUpdateTimer = undefined;
+        }
+
+        var allRows = document.querySelectorAll("#container .row");
+        var rowCount = allRows.length;
+        for (var i = 0; i < rowCount; i++) {
+            var row = allRows[i];
+
+            if (row.hasAttribute("data-row-localized-string-key")) {
+                var key = row.getAttribute("data-row-localized-string-key");
+                this.updateLocalizedStringRow(row, key);
+            } else if (row.hasAttribute("data-row-function")) {
+                var functionName = row.getAttribute("data-row-function");
+                if (typeof(this[functionName]) != "function") {
+                    console.error("Could not find data-row-function " + functionName);
+                    continue;
+                }
+
+                this[functionName](row);
+            }
+        }
+    },
+
+    updateLocalizedStringRow(rowElement, key) {
+        var localizedString = localizedStringManager.localizedStringForKey(key);
+        rowElement.innerText = localizedString;
+    },
+
+    updateCookieNoticeRow(rowElement) {
+        if (rowElement.hasAttribute("data-cookie-notice-configured")) {
+            return;
+        }
+
         var descriptionElement = document.createElement("div");
         descriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_short");
+        rowElement.appendChild(descriptionElement);
 
         var moreDescriptionElement = document.createElement("div");
         moreDescriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_expanded");
         moreDescriptionElement.className = "hidden";
+        rowElement.appendChild(moreDescriptionElement);
 
         var buttonContainerDivElement = document.createElement("div");
 
@@ -356,55 +476,18 @@ Fire.prototype = {
 
         buttonContainerDivElement.appendChild(moreInfoButton);
         buttonContainerDivElement.appendChild(acceptCookiesButton);
+        row.appendChild(buttonContainerDivElement);
 
-        this.addRowWithContents([descriptionElement, moreDescriptionElement, buttonContainerDivElement], "cookie-notice", true);
+        rowElement.setAttribute("data-cookie-notice-configured", "true");
     },
 
-    addCurrentPlayerRow: function() {
+    updateCurrentPlayerRow(rowElement) {
         var currentPlayer = localizedStringManager.localizedStringForKey("player_name_no_player");
         if (this.currentPlayer && this.currentPlayer.length > 0) {
             currentPlayer = this.currentPlayer;
         };
 
-        this.addRowWithContents(currentPlayer);
-    },
-
-    addVotingRow: function() {
-
-    },
-
-    addArdentLogoRow: function() {
-        var imageElement = document.createElement("img");
-        imageElement.src = "ardent.png";
-        imageElement.alt = "Ardent Heavy Industries";
-
-        var aElement = document.createElement("a");
-        aElement.href = "http://www.ardentheavyindustries.com/";
-        aElement.appendChild(imageElement);
-
-        this.addRowWithContents(aElement, "ardent-logo");
-    },
-
-    addLanguageSelectionRow: function() {
-        var self = this;
-
-        var englishButton = document.createElement("input");
-        englishButton.type = "button";
-        englishButton.value = "English";
-        englishButton.addEventListener("click", function() {
-            localizedStringManager.setLanguage(0);
-            self.reloadCurrentScreen();
-        });
-
-        var danishButton = document.createElement("input");
-        danishButton.type = "button";
-        danishButton.value = "Dansk";
-        danishButton.addEventListener("click", function() {
-            localizedStringManager.setLanguage(1);
-            self.reloadCurrentScreen();
-        });
-
-        this.addRowWithContents([englishButton, danishButton]);
+        rowElement.innerText = currentPlayer;
     },
 }
 
