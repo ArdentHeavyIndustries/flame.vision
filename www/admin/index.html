@@ -39,7 +39,6 @@
     </style>
     <script>
         var Admin = function() {
-            this.statusTimer = undefined;
         };
 
         Admin.prototype = {
@@ -50,16 +49,25 @@
             },
 
             setRunning: function(running) {
+                var self = this;
                 api.get("admin.cgi?running=" + running, function() {
-                    fire.pollStatus();
+                    self.pollStatus();
                 });
             },
 
             setPlayer: function() {
+                var self = this;
                 var playerName = document.getElementById("set-player-textfield").value.trim();
                 api.get("admin.cgi?currentplayer=" + encodeURIComponent(playerName), function() {
-                    fire.pollStatus();
+                    self.pollStatus();
                 });
+            },
+
+            pollStatus: function() {
+                var self = this;
+                api.poll("/status.cgi", function(response) {
+                    self.updateStatus(response);
+                }, 10);
             },
         }
 
@@ -90,10 +98,7 @@
                 event.preventDefault();
             });
 
-            fire.statusCallback = function(status) {
-                admin.updateStatus(status);
-            };
-            fire.pollStatus();
+            admin.pollStatus();
         }, false);
     </script>
 </head>
