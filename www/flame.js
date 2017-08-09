@@ -476,7 +476,7 @@ Fire.prototype = {
 
         buttonContainerDivElement.appendChild(moreInfoButton);
         buttonContainerDivElement.appendChild(acceptCookiesButton);
-        row.appendChild(buttonContainerDivElement);
+        rowElement.appendChild(buttonContainerDivElement);
 
         rowElement.setAttribute("data-cookie-notice-configured", "true");
     },
