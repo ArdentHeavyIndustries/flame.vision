@@ -355,7 +355,35 @@ Fire.prototype = {
             return;
         }
 
-        this.addRow(undefined, "data-row-function", "updateCookieNoticeRow", "cookie-notice", true);
+        var descriptionElement = document.createElement("div");
+        descriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_short");
+
+        var moreDescriptionElement = document.createElement("div");
+        moreDescriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_expanded");
+        moreDescriptionElement.className = "hidden";
+
+        var buttonContainerDivElement = document.createElement("div");
+
+        var moreInfoButton = document.createElement("input");
+        moreInfoButton.type = "button";
+        moreInfoButton.value = localizedStringManager.localizedStringForKey("cookie_expand_button");
+        moreInfoButton.addEventListener("click", function() {
+            moreInfoButton.remove();
+            moreDescriptionElement.classList.remove("hidden");
+        });
+
+        var acceptCookiesButton = document.createElement("input");
+        acceptCookiesButton.type = "button";
+        acceptCookiesButton.value = localizedStringManager.localizedStringForKey("cookie_accept_button");
+        acceptCookiesButton.addEventListener("click", function() {
+            document.getElementById("cookie-notice").remove();
+            window.localStorage.setItem("acceptedCookiePolicy", "true");
+        });
+
+        buttonContainerDivElement.appendChild(moreInfoButton);
+        buttonContainerDivElement.appendChild(acceptCookiesButton);
+
+        this.addRow([descriptionElement, moreDescriptionElement, buttonContainerDivElement], undefined, undefined, "cookie-notice", true);
     },
 
     addCurrentPlayerRow: function() {
@@ -440,45 +468,6 @@ Fire.prototype = {
     updateLocalizedStringRow(rowElement, key) {
         var localizedString = localizedStringManager.localizedStringForKey(key);
         rowElement.innerText = localizedString;
-    },
-
-    updateCookieNoticeRow(rowElement) {
-        if (rowElement.hasAttribute("data-cookie-notice-configured")) {
-            return;
-        }
-
-        var descriptionElement = document.createElement("div");
-        descriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_short");
-        rowElement.appendChild(descriptionElement);
-
-        var moreDescriptionElement = document.createElement("div");
-        moreDescriptionElement.innerText = localizedStringManager.localizedStringForKey("cookie_expanded");
-        moreDescriptionElement.className = "hidden";
-        rowElement.appendChild(moreDescriptionElement);
-
-        var buttonContainerDivElement = document.createElement("div");
-
-        var moreInfoButton = document.createElement("input");
-        moreInfoButton.type = "button";
-        moreInfoButton.value = localizedStringManager.localizedStringForKey("cookie_expand_button");
-        moreInfoButton.addEventListener("click", function() {
-            moreInfoButton.remove();
-            moreDescriptionElement.classList.remove("hidden");
-        });
-
-        var acceptCookiesButton = document.createElement("input");
-        acceptCookiesButton.type = "button";
-        acceptCookiesButton.value = localizedStringManager.localizedStringForKey("cookie_accept_button");
-        acceptCookiesButton.addEventListener("click", function() {
-            document.getElementById("cookie-notice").remove();
-            window.localStorage.setItem("acceptedCookiePolicy", "true");
-        });
-
-        buttonContainerDivElement.appendChild(moreInfoButton);
-        buttonContainerDivElement.appendChild(acceptCookiesButton);
-        rowElement.appendChild(buttonContainerDivElement);
-
-        rowElement.setAttribute("data-cookie-notice-configured", "true");
     },
 
     updateCurrentPlayerRow(rowElement) {
