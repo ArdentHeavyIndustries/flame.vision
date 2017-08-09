@@ -58,7 +58,11 @@ Element.prototype.remove = function() {
     parent.removeChild(this);
 }
 
-var API = function() {};
+var API = function() {
+    this.pollingTimers = {};
+    this.timeoutTimers = {};
+    this.pollingRequests = {};
+};
 
 API.prototype = {
     get: function(url, callback) {
@@ -75,6 +79,45 @@ API.prototype = {
         request.send();
 
         return request;
+    },
+
+    poll: function(url, callback, intervalInSeconds) {
+        var self = this;
+
+        if (this.pollingRequests[url]) {
+            return;
+        }
+
+        this.clearTimers(url);
+
+        this.pollingRequests[url] = api.get(url, function(response) {
+            self.clearTimers();
+            self.pollingRequests[url] = undefined;
+
+            callback(response);
+
+            self.pollingTimers[url] = window.setTimeout(function() {
+                self.poll(url, callback, intervalInSeconds);
+            }, intervalInSeconds * 1000);
+        });
+
+        this.timeoutTimers[url] = window.setTimeout(function() {
+            self.pollingRequests[url].abort();
+            self.pollingRequests[url] = undefined;
+            self.poll(url, callback, intervalInSeconds);
+        }, 30 * 1000);
+    },
+
+    clearTimers: function(url) {
+        if (this.timeoutTimers[url]) {
+            window.clearTimeout(this.timeoutTimers[url]);
+            this.timeoutTimers[url] = undefined;
+        }
+
+        if (this.pollingTimers[url]) {
+            window.clearTimeout(this.pollingTimers[url]);
+            this.pollingTimers[url] = undefined;
+        }
     },
 }
 
@@ -192,38 +235,11 @@ var Fire = function() {
 };
 
 Fire.prototype = {
-    pollStatus: function() {
+    startUpdates: function() {
         var self = this;
-
-        if (this.statusRequest) {
-            return;
-        }
-
-        this.clearStatusTimeoutTimer();
-
-        this.statusRequest == api.get("/status.cgi", function(status) {
-            self.clearStatusTimeoutTimer();
-            self.statusRequest = undefined;
-
-            self.statusCallback(status);
-
-            window.setTimeout(function() {
-                self.pollStatus();
-            }, 10 * 1000);
-        });
-
-        this.statusTimeoutTimer = window.setTimeout(function() {
-            self.statusRequest.abort();
-            self.statusRequest = undefined;
-            self.pollStatus();
-        }, 30 * 1000);
-    },
-
-    clearStatusTimeoutTimer: function() {
-        if (this.statusTimeoutTimer) {
-            window.clearTimeout(this.statusTimeoutTimer);
-            this.statusTimeoutTimer = undefined;
-        }
+        api.poll("/status.cgi", function(response) {
+            self.statusCallback(response);
+        }, 10);
     },
 
     statusCallback: function(status) {
@@ -394,6 +410,10 @@ Fire.prototype = {
 
     },
 
+    addLeadersRows: function() {
+        this.addRowWithFunctionBinding("updateLeadersRow");
+    },
+
     addArdentLogoRow: function() {
         var imageElement = document.createElement("img");
         imageElement.src = "ardent.png";
@@ -465,18 +485,22 @@ Fire.prototype = {
         }
     },
 
-    updateLocalizedStringRow(rowElement, key) {
+    updateLocalizedStringRow: function(rowElement, key) {
         var localizedString = localizedStringManager.localizedStringForKey(key);
         rowElement.innerText = localizedString;
     },
 
-    updateCurrentPlayerRow(rowElement) {
+    updateCurrentPlayerRow: function(rowElement) {
         var currentPlayer = localizedStringManager.localizedStringForKey("player_name_no_player");
         if (this.currentPlayer && this.currentPlayer.length > 0) {
             currentPlayer = this.currentPlayer;
         };
 
         rowElement.innerText = currentPlayer;
+    },
+
+    updateLeadersRow: function() {
+
     },
 }
 
