@@ -15,6 +15,10 @@ var localizedStrings = {
     "flame.vision uses cookies to help count votes. We don't use cookies for marketing or any other tracking reasons. Is that cool with you?",
     "flame.vision anvender alene cookies for at kunne tælle point. Vi bruger ikke cookies til nogen form for markedsføring elle andre formål. Er det cool med dig?"
   ],
+  "top_10": [
+    "Top 10:",
+    "Top 10:"
+  ],
   "loading_placeholder": [
     "STAND BY",
     "standby"
@@ -338,7 +342,7 @@ Fire.prototype = {
         this.addCurrentPlayerRow();
         this.addRowWithLocalizedStringKey("vote_title");
         this.addVotingRow();
-        this.addLeadersRow();
+        this.addLeadersRows();
 
         this.addArdentLogoRow();
         this.addLanguageSelectionRow();
@@ -351,7 +355,7 @@ Fire.prototype = {
         this.addRowWithLocalizedStringKey("not_running_dates");
         this.addRowWithLocalizedStringKey("not_running_times");
         this.addRowWithLocalizedStringKey("not_running_weather_notice");
-        this.addLeadersRow();
+        this.addLeadersRows();
 
         this.addArdentLogoRow();
         this.addLanguageSelectionRow();
@@ -452,8 +456,9 @@ Fire.prototype = {
 
     },
 
-    addLeadersRow: function() {
-        this.addRowWithFunctionBinding("updateLeadersRow");
+    addLeadersRows: function() {
+        this.addRowWithLocalizedStringKey("top_10");
+        this.addRowWithFunctionBinding("updateLeadersRow", "leaders-row");
     },
 
     addArdentLogoRow: function() {
@@ -543,10 +548,6 @@ Fire.prototype = {
 
     updateLeadersRow: function(rowElement) {
         rowElement.removeAllChildren();
-
-        var h3Element = document.createElement("h3");
-        h3Element.innerText = "Top 10:";
-        rowElement.appendChild(h3Element);
 
         var olElement = document.createElement("ol");
         var leaderCount = this.leaders.length;

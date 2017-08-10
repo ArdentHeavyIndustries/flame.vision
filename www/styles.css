@@ -78,3 +78,10 @@ p {
     padding-left: 20px;
     padding-right: 20px;
 }
+
+#leaders-row ol, #leaders-row li {
+    font-size: 18px;
+    line-height: 21px;
+    display: inline-block;
+    padding: 0 8px;
+}
