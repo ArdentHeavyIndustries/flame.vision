@@ -83,5 +83,13 @@ p {
     font-size: 18px;
     line-height: 21px;
     display: inline-block;
+}
+
+#leaders-row li {
     padding: 0 8px;
+}
+
+#leaders-row ol {
+    padding-top: 21px;
+    padding-bottom: 21px;
 }
