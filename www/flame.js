@@ -243,6 +243,7 @@ var Fire = function() {
     this.statusNextUpdateTimer = undefined;
     this.statusTimeoutTimer = undefined;
 
+    this.reloadScreenOnUpdate = false;
     this.domUpdateTimer = undefined;
 };
 
@@ -258,8 +259,6 @@ Fire.prototype = {
     },
 
     statusCallback: function(status) {
-        var reloadScreen = false;
-
         var running = this.stringToBoolean(status["running"]);
         if (running === undefined) {
             running = false;
@@ -268,19 +267,15 @@ Fire.prototype = {
         var currentPlayer = status["currentplayer"];
         if (typeof(currentPlayer) === "string" && this.currentPlayer !== currentPlayer) {
             this.currentPlayer = currentPlayer;
-            reloadScreen = true;
+            this.reloadScreenOnUpdate = true;
         }
 
         if (this.running !== running) {
             this.running = running;
-            reloadScreen = true;
+            this.reloadScreenOnUpdate = true;
         }
 
-        if (reloadScreen) {
-            this.reloadCurrentScreen();
-        } else {
-            this.updateDOMSoon();
-        }
+        this.updateDOMSoon();
     },
 
     leadersCallback: function(response) {
@@ -326,13 +321,14 @@ Fire.prototype = {
     },
 
     reloadCurrentScreen: function(idToShow) {
+        this.reloadScreenOnUpdate = false;
+
         this.removeAllRows();
         if (this.running) {
             this.showRunningScreen();
         } else {
             this.showNotRunningScreen();
         }
-        this.updateDOMSoon();
     },
 
     showRunningScreen: function() {
@@ -547,6 +543,10 @@ Fire.prototype = {
         if (this.domUpdateTimer) {
             window.clearTimeout(this.domUpdateTimer);
             this.domUpdateTimer = undefined;
+        }
+
+        if (this.reloadScreenOnUpdate) {
+            this.reloadCurrentScreen();
         }
 
         var allRows = document.querySelectorAll("#container .row");
