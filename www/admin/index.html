@@ -44,7 +44,6 @@
         Admin.prototype = {
             updateStatus: function(status) {
                 document.getElementById("current-status-currentplayer").innerText = status["currentplayer"];
-                document.getElementById("current-status-currentaverage").innerText = status["currentavg"];
                 document.getElementById("current-status-running").innerText = status["running"];
             },
 
@@ -82,11 +81,6 @@
                 admin.setRunning("false");
             });
 
-            document.getElementById("set-player-button").addEventListener("click", function() {
-                var playerName = document.getElementById("set-player-textfield").value.trim();
-                admin.setPlayer();
-            });
-
             var setPlayerTextFieldElement = document.getElementById("set-player-textfield");
             setPlayerTextFieldElement.addEventListener("focus", function() {
                 setPlayerTextFieldElement.value = "";
@@ -109,10 +103,6 @@
         <output id="current-status-currentplayer"></output>
     </p>
     <p>
-        <label for="current-status-currentaverage">Current Average</label>
-        <output id="current-status-currentaverage"></output>
-    </p>
-    <p>
         <label for="current-status-running">Running</label>
         <output id="current-status-running"></output>
     </p>
@@ -122,9 +112,6 @@
     <form id="set-player-form" action="fake.cgi">
         <p>
             <input type="text" id="set-player-textfield">
-        </p>
-        <p>
-            <input id="set-player-button" type="button" value="Set Player">
         </p>
     </form>
 </div>
