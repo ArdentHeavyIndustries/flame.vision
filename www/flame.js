@@ -457,7 +457,8 @@ Fire.prototype = {
         for (var i = 1; i <= 5; i++) {
             var buttonElement = document.createElement("input");
             buttonElement.type = "button";
-            buttonElement.value = i.toString();
+            buttonElement.value = "🔥";
+            buttonElement.setAttribute("data-vote-value", i.toString());
 
             buttonElement.addEventListener("click", function(event) {
                 self.voteHandler(event);
@@ -474,10 +475,11 @@ Fire.prototype = {
     },
 
     voteHandler: function(event) {
-        var value = event.target.value;
+        var value = event.target.getAttribute("data-vote-value");
         var intValue = parseInt(value);
 
         api.get("/rate.cgi?v=" + value, function() {
+
         });
 
         var buttonElements = document.querySelectorAll("#vote-row input");

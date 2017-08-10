@@ -109,8 +109,20 @@ p {
 
 #vote-row output {
     visibility: hidden;
+    padding-right: 8px;
 }
 
 #vote-row.voted output {
     visibility: visible;
+}
+
+#vote-row input[type=button] {
+    text-decoration: none;
+}
+
+#vote-row form {
+    display: inline-block;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.4);
+    line-height: 0;
 }
