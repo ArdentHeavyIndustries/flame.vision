@@ -106,3 +106,11 @@ p {
 #vote-row.voted input {
     opacity: 1.0;
 }
+
+#vote-row output {
+    visibility: hidden;
+}
+
+#vote-row.voted output {
+    visibility: visible;
+}

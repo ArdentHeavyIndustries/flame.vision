@@ -466,6 +466,10 @@ Fire.prototype = {
             formElement.appendChild(buttonElement);
         }
 
+        var confirmationElement = document.createElement("output");
+        confirmationElement.value = "✔︎";
+        formElement.appendChild(confirmationElement);
+
         this.addRow([formElement], undefined, undefined, "vote-row");
     },
 
