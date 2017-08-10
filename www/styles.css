@@ -93,3 +93,16 @@ p {
     padding-top: 21px;
     padding-bottom: 21px;
 }
+
+#vote-row input {
+    font-size: 48px;
+    opacity: 0.8;
+}
+
+#vote-row input.selected ~ input {
+    opacity: 0.3;
+}
+
+#vote-row.voted input {
+    opacity: 1.0;
+}

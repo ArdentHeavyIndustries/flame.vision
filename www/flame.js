@@ -340,8 +340,7 @@ Fire.prototype = {
 
         this.addRowWithLocalizedStringKey("player_name_title");
         this.addCurrentPlayerRow();
-        this.addRowWithLocalizedStringKey("vote_title");
-        this.addVotingRow();
+        this.addVotingRows();
         this.addLeadersRows();
 
         this.addArdentLogoRow();
@@ -452,8 +451,46 @@ Fire.prototype = {
         this.addRowWithFunctionBinding("updateCurrentPlayerRow");
     },
 
-    addVotingRow: function() {
+    addVotingRows: function() {
+        var self = this;
 
+        this.addRowWithLocalizedStringKey("vote_title");
+
+        var formElement = document.createElement("form");
+
+        for (var i = 1; i <= 5; i++) {
+            var buttonElement = document.createElement("input");
+            buttonElement.type = "button";
+            buttonElement.value = i.toString();
+
+            buttonElement.addEventListener("click", function(event) {
+                self.voteHandler(event);
+            });
+
+            formElement.appendChild(buttonElement);
+        }
+
+        this.addRow([formElement], undefined, undefined, "vote-row");
+    },
+
+    voteHandler: function(event) {
+        var value = event.target.value;
+        var intValue = parseInt(value);
+
+        api.get("/rate.cgi?v=" + value, function() {
+        });
+
+        var buttonElements = document.querySelectorAll("#vote-row input");
+        var buttonElementCount = buttonElements.length;
+        for (var i = 0; i < buttonElementCount; i++) {
+            var buttonElement = buttonElements[i];
+            buttonElement.classList.remove("selected");
+        }
+
+        buttonElements[intValue - 1].classList.add("selected");
+
+        var rowElement = document.getElementById("vote-row");
+        rowElement.classList.add("voted");
     },
 
     addLeadersRows: function() {
