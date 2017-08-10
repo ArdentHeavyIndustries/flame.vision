@@ -56,7 +56,13 @@ var localizedStrings = {
 Element.prototype.remove = function() {
     var parent = this.parentElement;
     parent.removeChild(this);
-}
+};
+
+Element.prototype.removeAllChildren = function() {
+    while(this.firstChild) {
+        this.removeChild(this.firstChild);
+    }
+};
 
 var API = function() {
     this.pollingTimers = {};
@@ -91,7 +97,7 @@ API.prototype = {
         this.clearTimers(url);
 
         this.pollingRequests[url] = api.get(url, function(response) {
-            self.clearTimers();
+            self.clearTimers(url);
             self.pollingRequests[url] = undefined;
 
             callback(response);
@@ -227,6 +233,8 @@ var Fire = function() {
     this.currentPlayer = undefined;
     this.currentAverageScore = undefined;
 
+    this.leaders = new Array();
+
     this.statusRequest = undefined;
     this.statusNextUpdateTimer = undefined;
     this.statusTimeoutTimer = undefined;
@@ -240,14 +248,18 @@ Fire.prototype = {
         api.poll("/status.cgi", function(response) {
             self.statusCallback(response);
         }, 10);
+        api.poll("/leaders.cgi", function(response) {
+            self.leadersCallback(response);
+        }, 30);
     },
 
     statusCallback: function(status) {
         var reloadScreen = false;
 
         var running = this.stringToBoolean(status["running"]);
-        if (running === undefined)
+        if (running === undefined) {
             running = false;
+        }
 
         var currentPlayer = status["currentplayer"];
         if (typeof(currentPlayer) === "string" && this.currentPlayer !== currentPlayer) {
@@ -265,6 +277,34 @@ Fire.prototype = {
         } else {
             this.updateDOMSoon();
         }
+    },
+
+    leadersCallback: function(response) {
+        var unpackedLeaders = new Array();
+
+        var leadersArray = response["leaders"];
+        if (!Array.isArray(leadersArray)) {
+            return;
+        }
+
+        var leadersCount = leadersArray.length - 1;
+        for (var i = 0; i < leadersCount; i++) {
+            var leaderObject = leadersArray[i];
+            if (typeof(leaderObject) !== "object") {
+                continue;
+            }
+
+            var leaderName = leaderObject["name"];
+
+            if (typeof(leaderName) !== "string" || !leaderName.length) {
+                continue;
+            }
+
+            unpackedLeaders.push({ "name": leaderName });
+        }
+
+        this.leaders = unpackedLeaders;
+        this.updateDOMSoon();
     },
 
     stringToBoolean: function(string) {
@@ -298,6 +338,7 @@ Fire.prototype = {
         this.addCurrentPlayerRow();
         this.addRowWithLocalizedStringKey("vote_title");
         this.addVotingRow();
+        this.addLeadersRow();
 
         this.addArdentLogoRow();
         this.addLanguageSelectionRow();
@@ -310,6 +351,7 @@ Fire.prototype = {
         this.addRowWithLocalizedStringKey("not_running_dates");
         this.addRowWithLocalizedStringKey("not_running_times");
         this.addRowWithLocalizedStringKey("not_running_weather_notice");
+        this.addLeadersRow();
 
         this.addArdentLogoRow();
         this.addLanguageSelectionRow();
@@ -410,7 +452,7 @@ Fire.prototype = {
 
     },
 
-    addLeadersRows: function() {
+    addLeadersRow: function() {
         this.addRowWithFunctionBinding("updateLeadersRow");
     },
 
@@ -499,8 +541,21 @@ Fire.prototype = {
         rowElement.innerText = currentPlayer;
     },
 
-    updateLeadersRow: function() {
+    updateLeadersRow: function(rowElement) {
+        rowElement.removeAllChildren();
 
+        var h3Element = document.createElement("h3");
+        h3Element.innerText = "Top 10:";
+        rowElement.appendChild(h3Element);
+
+        var olElement = document.createElement("ol");
+        var leaderCount = this.leaders.length;
+        for (var i = 0; i < leaderCount; i++) {
+            var liElement = document.createElement("li");
+            liElement.innerText = this.leaders[i]["name"];
+            olElement.appendChild(liElement);
+        }
+        rowElement.appendChild(olElement);
     },
 }
 
