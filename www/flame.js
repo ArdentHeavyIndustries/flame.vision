@@ -17,7 +17,7 @@ var localizedStrings = {
   ],
   "top_10": [
     "Top 10:",
-    "Top 10:"
+    "Top 10"
   ],
   "loading_placeholder": [
     "STAND BY",
@@ -40,7 +40,7 @@ var localizedStrings = {
     "Hvis vejret tillader det"
   ],
   "player_name_title": [
-    "Currently Playing",
+    "Currently Playing:",
     "Spiller nu"
   ],
   "player_name_no_player": [
@@ -48,7 +48,7 @@ var localizedStrings = {
     "Ingen spilelr"
   ],
   "vote_title": [
-    "Vote",
+    "Vote:",
     "Stem"
   ],
   "website_title": [
